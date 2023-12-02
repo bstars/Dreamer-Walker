@@ -7,7 +7,7 @@ This work is insprired by
 - [adityabingi's implementation for Dreamer](https://github.com/adityabingi/Dreamer/tree/main)
 - [abhayraw1's implementation for RSSM](https://github.com/abhayraw1/planet-torch)
 
-The following is the result of my implementation (I sampled 1 episode every 100 iterations, and save the checkpoints every 1000 iterations).
+The following is the result of my implementation (I sampled 1 episode every 100 iterations, and save the checkpoints every 2000 iterations).
 
 <p>
   <img width="50%" src="https://github.com/bstars/Dreamer-Walker/blob/main/train_history.png">
