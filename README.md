@@ -1,6 +1,6 @@
 # Dreamer 
 
-This is the final project for JHU 520.637 Fall 2023. I made a (readable) implementation of Dreamer in PyTorch. 
+This is the final project for JHU 520.637 Foundations for Reinforcement Learning Fall 2023. I made a (readable) implementation of Dreamer in PyTorch. 
 This work is insprired by 
 
 - [Dream to Control: Learning Behaviors by Latent Imagination](https://arxiv.org/abs/1912.01603)
