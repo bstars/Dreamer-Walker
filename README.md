@@ -10,7 +10,7 @@ This work is insprired by
 The following is the result of my implementation (I sampled 1 episode every 100 iterations, and save the checkpoints every 1000 iterations).
 
 <p>
-  <img width="35%" src="https://github.com/bstars/Dreamer-Walker/blob/main/train_history.png">
+  <img width="50%" src="https://github.com/bstars/Dreamer-Walker/blob/main/train_history.png">
 </p>
 
 In my code, I trained for 100k iterations, and the final behavior looks like    
@@ -21,7 +21,7 @@ In my code, I trained for 100k iterations, and the final behavior looks like
 The model can also rollout a trajectory in "imagnination" (refer to Figure 5 in the paper), the following is my result,
 the first row is "imagination" and the second row is the real trajectory.
 <p>
-  <img width="35%" src="https://github.com/bstars/Dreamer-Walker/blob/main/imagine.png">
+  <img width="50%" src="https://github.com/bstars/Dreamer-Walker/blob/main/imagine.png">
 </p>
 
 
