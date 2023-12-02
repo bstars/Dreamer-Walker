@@ -17,6 +17,14 @@ In my code, I trained for 100k iterations, and the final behavior looks like
 <p>
   <img width="35%" src="https://github.com/bstars/Dreamer-Walker/blob/main/50.gif">
 </p>
+
+The model can also rollout a trajectory in "imagnination" (refer to Figure 5 in the paper), the following is my result,
+the first row is "imagination" and the second row is the real trajectory.
+<p>
+  <img width="35%" src="https://github.com/bstars/Dreamer-Walker/blob/main/imagine.png">
+</p>
+
+
 The training time is 5 hours on a colab V100 GPU.
 My code seems to learn slower than [adityabingi's implementation](https://github.com/adityabingi/Dreamer/tree/main).
 
