@@ -10,7 +10,7 @@ This work is insprired by
 The following is the result of my implementation (I sampled 1 episode every 100 iterations, and save the checkpoints every 2000 iterations).
 
 <p>
-  <img width="50%" src="https://github.com/bstars/Dreamer-Walker/blob/main/train_history.png">
+  <img width="50%" src="https://github.com/bstars/Dreamer-Walker/blob/main/train_compare.png">
 </p>
 
 In my code, I trained for 100k iterations, and the final behavior looks like    
