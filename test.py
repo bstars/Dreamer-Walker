@@ -11,18 +11,19 @@ from config import Config
 from helpers import np_to_torch, torch_to_np, preprocess_img, postprocess_img
 from replay import Episode
 from env_wrapper import make_env
-
+from mpc import MPCPolicy
 
 class Tester():
 	def __init__(self):
 		self.dreamer = Dreamer().to(Config.device)
+		self.mpc = MPCPolicy(self.dreamer)
 
 	def load_ckpt(self, path):
 		ckpt = torch.load(path, map_location=Config.device)
 		self.dreamer.load_state_dict(ckpt)
 
 
-	def sample_episode(self, render=False):
+	def sample_episode(self, mpc=False, render=False):
 		env = make_env()
 		obs = env.reset()
 		obs_prep = preprocess_img(obs['image'])
@@ -35,7 +36,10 @@ class Tester():
 		h, s = self.dreamer.rssm.get_init_state(e)
 
 		while not done:
-			action = self.dreamer.actor_forward(h, s, deter=True)
+			if mpc:
+				action = self.mpc.act(h, s)
+			else:
+				action = self.dreamer.actor_forward(h, s, deter=True)
 			action_np = torch_to_np(action[0])
 			# action_np = action_np + np.random.normal(0, Config.exploration_noise, action_np.shape)
 
@@ -105,22 +109,24 @@ class Tester():
 
 
 def plot_train_history():
-	# tester = Tester()
+	tester = Tester()
 	historys = []
 	num_ckpt = 10
 	# for i in tqdm(range(1, num_ckpt + 1)):
 	# 	tester.load_ckpt('ckpts/dreamer_%d.pt' % (i*5))
 	# 	historys.append(
-	# 		[tester.sample_episode(render=False)[0] for _ in range(10)]
+	# 		[tester.sample_episode(render=False, mpc=True)[0] for _ in range(10)]
 	# 	)
 	#
 	# historys = np.array(historys)
-	# savemat('historys.mat', {'historys': historys})
+	# savemat('historys_mpc.mat', {'historys': historys})
+
 	historys = loadmat('historys.mat')['historys']
 	plt.plot(
 		np.arange(1, num_ckpt+1, 1) * 100,
 		np.mean(historys, axis=1),
-		'o--'
+		'o--',
+		label='One-Step Control'
 	)
 	plt.fill_between(
 		np.arange(1, num_ckpt+1, 1) * 100,
@@ -128,8 +134,24 @@ def plot_train_history():
 		np.mean(historys, axis=1) + np.std(historys, axis=1),
 		alpha=0.2
 	)
+
+	historys = loadmat('historys_mpc.mat')['historys']
+	plt.plot(
+		np.arange(1, num_ckpt + 1, 1) * 100,
+		np.mean(historys, axis=1),
+		'o--',
+		label='Model Predictive Control'
+	)
+	plt.fill_between(
+		np.arange(1, num_ckpt + 1, 1) * 100,
+		np.mean(historys, axis=1) - np.std(historys, axis=1),
+		np.mean(historys, axis=1) + np.std(historys, axis=1),
+		alpha=0.2
+	)
+
 	plt.xlabel('# episodes')
 	plt.ylabel('total reward')
+	plt.legend()
 	plt.savefig('train_history.png', dpi=300)
 
 def make_gif():
@@ -138,14 +160,16 @@ def make_gif():
 		tester.load_ckpt('ckpts/dreamer_%d.pt' % i)
 		_, epi = tester.sample_episode(render=False)
 		gif = [ postprocess_img(epi.obs[i].transpose(1, 2, 0)) for i in range(100, 400)]
-		imageio.mimsave('%d.gif' % i, gif, duration=50)
+		imageio.mimsave('%d.gif' % i, gif, duration=50, loop=1000)
 
 
 
 if __name__ == '__main__':
-	# tester = Tester()
-	# tester.load_ckpt('ckpts/dreamer_5.pt')
-	# tester.sample_episode(render=True)
+	tester = Tester()
+	tester.load_ckpt('ckpts/dreamer_50.pt')
+	# tester.sample_episode(mpc=True, render=True)
 	# tester.show_path()
 	plot_train_history()
 	# make_gif()
+
+
